@@ -50,6 +50,12 @@ type ResponseSignature = {
   }
 }
 
+
+if(ARGS[0] === 'event') {
+  for(const EVENT of EVENT_TYPES) {console.log(EVENT)};
+  process.exit(0);
+};
+
 if(!ARGS[0]) {
   try {
   throw new Error(
