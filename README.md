@@ -1,4 +1,5 @@
 # github-activity
+This project was based on requeriments from [github-user-activity](https://roadmap.sh/projects/github-user-activity)
 
 clone the repository:
 ```bash
