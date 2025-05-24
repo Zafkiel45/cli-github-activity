@@ -27,16 +27,21 @@ async function getActivity() {
     const EVENTS: ApiResponse[] = await EVENT_REQUEST.json();
 
     if (ARGS[1]) {
-      const FILTER_EVENTS = EVENTS.filter((item) => {
-        return item.type === ARGS[1];
-      });
-
-      if (FILTER_EVENTS.length === 0) {
-        console.log(`There are not events for ${yellowTextColor(ARGS[1])}`);
-        process.exit(0);
-      }
-
-      loopOverActivity(ARGS[0], FILTER_EVENTS);
+      if(EVENT_TYPES.includes(ARGS[1] as typeof EVENT_TYPES[number])) {
+        const FILTER_EVENTS = EVENTS.filter((item) => {
+          return item.type === ARGS[1];
+        });
+  
+        if (FILTER_EVENTS.length === 0) {
+          console.log(`There are not events for ${yellowTextColor(ARGS[1])}`);
+          process.exit(0);
+        }
+  
+        loopOverActivity(ARGS[0], FILTER_EVENTS);
+      } else {
+        console.error('This event does not exist... Run: bun run index.ts event for a list of events');
+      };
+      
     } else {
       loopOverActivity(ARGS[0], EVENTS);
       process.exit(0);
