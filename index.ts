@@ -1,5 +1,6 @@
 import type { ApiResponse } from "./types/api_response";
 import { EVENT_TYPES } from "./types/api_response";
+import { loopOverActivity } from "./utils/loop_over_activity";
 import { yellowTextColor, redTextColor } from "./utils/paint_texts";
 
 const ARGS = process.argv.slice(2);
@@ -13,8 +14,10 @@ function showEvents() {
 
 async function getActivity() {
   if (!ARGS[0]) {
-    throw new Error(`${redTextColor("[ERROR]")}: You forgot to pass a github user. Please, check the` + "information and try again.");
-  }
+    throw new Error(`${redTextColor("[ERROR]")}: You forgot to pass a github user. Please, check the` + 
+      "information and try again."
+    );
+  };
 
   try {
     // It's possible to get the ETag and store in cache. Posterior requests will
@@ -33,21 +36,9 @@ async function getActivity() {
         process.exit(0);
       }
 
-      for (const EVENT of FILTER_EVENTS) {
-        console.log(
-          `${ARGS[0]}  perfomed a ${yellowTextColor(EVENT.type)} on ${
-            EVENT.repo.name
-          }`
-        );
-      }
+      loopOverActivity(ARGS[0], FILTER_EVENTS);
     } else {
-      for (const EVENT of EVENTS) {
-        console.log(
-          `${ARGS[0]} perfomed a ${yellowTextColor(EVENT.type)}  on ${
-            EVENT.repo.name
-          }`
-        );
-      }
+      loopOverActivity(ARGS[0], EVENTS);
       process.exit(0);
     }
   } catch (err) {
