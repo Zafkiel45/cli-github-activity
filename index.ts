@@ -1,55 +1,7 @@
+import type { ApiResponse } from "./types/api_response";
+import { EVENT_TYPES } from "./types/api_response";
+
 const ARGS = process.argv.slice(2);
-
-const EVENT_TYPES = [
-  'CommitCommentEvent',
-  'CreateEvent',
-  'DeleteEvent',
-  'ForkEvent',
-  'GollumEvent',
-  'IssueCommentEvent',
-  'IssuesEvent',
-  'MemberEvent',
-  'PublicEvent',
-  'PullRequestEvent',
-  'PullRequestReviewEvent',
-  'PullRequestReviewCommentEvent',
-  'PullRequestReviewThreadEvent',
-  'PushEvent',
-  'ReleaseEvent',
-  'SponsorshipEvent',
-  'WatchEvent',
-] as const;
-
-// A light version of response github. 
-
-type ResponseSignature = {
-  id: string; 
-  type: typeof EVENT_TYPES[number]; 
-  actor: {
-    id: number;
-    login: string;
-    display_login: string; 
-    gravatar_id: string; 
-    url: string;
-    avatar_url: string;
-  },
-  repo: {
-    id: number;
-    name: string;
-    url: string;
-  },
-  payload: {
-    repository_id: number;
-    push_id: number; 
-    size: number;
-    distinct_size: number; 
-    ref: string;
-    head: string;
-    before: string;
-    commits: Object[]
-  }
-}
-
 
 if(ARGS[0] === 'event') {
   for(const EVENT of EVENT_TYPES) {console.log(EVENT)};
@@ -76,7 +28,7 @@ try {
   // Be compared by ETag, making the request only if the current ETag is different
   // From old ETag. 
   const EVENT_REQUEST = await fetch(`https://api.github.com/users/${ARGS[0]}/events`);
-  const EVENTS: ResponseSignature[] = await EVENT_REQUEST.json();
+  const EVENTS: ApiResponse[] = await EVENT_REQUEST.json();
 
   if(ARGS[1]) {
     const FILTER_EVENTS = EVENTS.filter((item) => {
