@@ -1,5 +1,6 @@
 import type { ApiResponse } from "./types/api_response";
 import { EVENT_TYPES } from "./types/api_response";
+import { yellowTextColor, redTextColor } from "./utils/paint_texts";
 
 const ARGS = process.argv.slice(2);
 
@@ -11,7 +12,7 @@ if(ARGS[0] === 'event') {
 if(!ARGS[0]) {
   try {
   throw new Error(
-    "\x1b[31m[Error]\x1b[0m: You forgot to pass a github user. Please, check the" +
+    `${redTextColor('[ERROR]')}: You forgot to pass a github user. Please, check the` +
     "information and try again.");
   } catch(err) {
 
@@ -36,17 +37,17 @@ try {
     });
   
     if(FILTER_EVENTS.length === 0) {
-      console.log(`There are not events for \x1b[34m${ARGS[1]}\x1b[0m`);
+      console.log(`There are not events for ${yellowTextColor(ARGS[1])}`);
       process.exit(0);
     };
   
     for(const EVENT of FILTER_EVENTS) {
-      console.log(`${ARGS[0]}  perfomed a \x1b[33m${ARGS[1]}\x1b[0m on ${EVENT.repo.name}`);
+      console.log(`${ARGS[0]}  perfomed a ${yellowTextColor(EVENT.type)} on ${EVENT.repo.name}`);
     };
   
   } else {
     for(const EVENT  of EVENTS) {
-      console.log(`${ARGS[0]} perfomed a \x1b[33m${EVENT.type}\x1b[0m  on ${EVENT.repo.name}`);
+      console.log(`${ARGS[0]} perfomed a ${yellowTextColor(EVENT.type)}  on ${EVENT.repo.name}`);
     }
     process.exit(0);
   };
